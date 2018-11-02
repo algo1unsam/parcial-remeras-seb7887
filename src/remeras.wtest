@@ -2,7 +2,7 @@ import remera.*
 import color.*
 import marca.*
 
-describe "group of tests" {
+describe "Remeras" {
 
 	var colorGris
 	var colorBlanco

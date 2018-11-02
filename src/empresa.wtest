@@ -1,0 +1,61 @@
+import empresa.*
+import remera.*
+import color.*
+import marca.*
+
+describe "Empresa" {
+
+	var empresa
+	var flores
+	var avellaneda
+	var colorGris
+	var disneyConConvenio
+	var disneySinConvenio
+	var remeraLisaGris42
+	var remeraFrozen42
+	var remeraSinConvenio
+	var pedido5RemerasLisas42
+	var pedido4RemerasFrozen42
+	var pedido4RemerasSinConvenio
+	
+	fixture {
+		flores = new Sucursal(cantidadMinimaParaDescuento = 10)
+		avellaneda = new Sucursal(cantidadMinimaParaDescuento = 3)
+		empresa = new Empresa(sucursales = [flores, avellaneda])
+		colorGris = new ColorBasico()
+		disneyConConvenio = new Marca(derechosDeAutor = 100, hayConvenio = true)
+		disneySinConvenio = new Marca(derechosDeAutor = 100)
+		remeraLisaGris42 = new RemeraLisa(talle = 42, colorBase = colorGris)
+		remeraFrozen42 = new RemeraSublimada(talle = 42, colorBase = colorGris, alto = 10, ancho = 15, marcaEstampada = disneyConConvenio)
+		remeraSinConvenio = new RemeraSublimada(talle = 42, colorBase = colorGris, alto = 10, ancho = 15, marcaEstampada = disneySinConvenio)
+		pedido5RemerasLisas42 = new Pedido(remera = remeraLisaGris42, cantidad = 5)
+		pedido4RemerasFrozen42 = new Pedido(remera = remeraFrozen42, cantidad = 4)
+		pedido4RemerasSinConvenio =  new Pedido(remera = remeraSinConvenio, cantidad = 4)
+	}
+
+	test "Flores: 5 remeras lisas no se aplica descuento, vale 500" {
+		empresa.agregarPedido(pedido5RemerasLisas42, flores)
+		assert.equals(500, pedido5RemerasLisas42.valor())
+	}
+	
+	test "Avellaneda: 5 remeras lisas se aplica descuento, vale 450" {
+		empresa.agregarPedido(pedido5RemerasLisas42, avellaneda)
+		assert.equals(450, pedido5RemerasLisas42.valor())
+	}
+	
+	test "Flores: 4 remeras de Frozen, hay convenio con Disney, no hay descuento, vale 1100" {
+		empresa.agregarPedido(pedido4RemerasFrozen42, flores)
+		assert.equals(1100, pedido4RemerasFrozen42.valor())
+	}
+	
+	test "Avellaneda: 4 remeras de Frozen, hay convenio con Disney, hay descuento, vale 880" {
+		empresa.agregarPedido(pedido4RemerasFrozen42, avellaneda)
+		assert.equals(880, pedido4RemerasFrozen42.valor())
+	}
+	
+	test "Avellaneda: 4 remeras de Frozen, sin convenio con Disney, hay descuento, vale 990" {
+		empresa.agregarPedido(pedido4RemerasSinConvenio, avellaneda)
+		assert.equals(990, pedido4RemerasSinConvenio.valor())
+	}
+	
+}

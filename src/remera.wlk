@@ -2,7 +2,7 @@ object exceptionTalleInvalido inherits Exception {}
 
 class RemeraLisa {
 
-	const talle = 0
+	var property talle = 0
 	var property colorBase = null
 
 	method costoBaseTalle() {
@@ -19,7 +19,7 @@ class RemeraLisa {
 
 	method costo() = self.costoBaseTalle() + self.costoBaseColor()
 	
-	method descuento() = 10 / 100
+	method descuento() = 10 / 100 * self.costo()
 	
 }
 
@@ -52,6 +52,6 @@ class RemeraSublimada inherits RemeraLisa {
 	
 	override method costo() = super() + self.costoSublimado()
 	
-	override method descuento() = if (marcaEstampada.hayConvenio()) 20/100 else super()
+	override method descuento() = if (marcaEstampada.hayConvenio()) (20/100 * self.costo()) else super()
 	
 }

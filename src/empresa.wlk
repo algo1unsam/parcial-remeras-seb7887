@@ -6,7 +6,7 @@ class Empresa {
 	
 	method agregarPedido(pedido, sucursal) {
 		if (sucursales.contains(sucursal)) {
-			sucursal.pedidos().add(pedido)
+			sucursal.agregarPedido(pedido)
 		} else {
 			throw exceptionSucursalInvalida
 		}		
@@ -42,9 +42,13 @@ class Pedido {
 	
 	var property remera = null
 	var property cantidad = 0
-	var property sucursal = null
+	var property descuento = false
 	
-	method valor() = (remera.costo() * cantidad) - sucursal.descuento(cantidad)
+	method valorBase() = (remera.costo() * cantidad)
+	
+	method valorDescuento() = if (descuento) remera.descuento() * cantidad else 0
+	
+	method valor() = self.valorBase() - self.valorDescuento()
 	
 }
 
@@ -55,12 +59,21 @@ class Sucursal {
 	var tallesPedidos = []
 	var property cantidadMinimaParaDescuento = 100
 		
-	method descuento(remera, cantidad) = if (cantidad >= cantidadMinimaParaDescuento) remera.descuento() else 0
+	method hayDescuento(cantidad) = cantidad >= cantidadMinimaParaDescuento
+	
+	// Aplico descuento si cumple la condicion y lo agrego
+	method agregarPedido(pedido) {
+		if (self.hayDescuento(pedido.cantidad())) {
+			pedido.descuento(true)
+		}
+		tallesPedidos.add(pedido.remera().talle())
+		pedidos.add(pedido)
+	}
 	 
 	method facturacion() = pedidos.sum{ pedido => pedido.valor() }
 	
 	// 48 - 32 = 16 talles en total
-	method vendioTodosLosTalles() = tallesPedidos.size() == 16
+	method vendioTodosLosTalles() = tallesPedidos.asSet().size() == 16
 	
 	method pedidoMasCaro() = pedidos.max{ pedido => pedido.valor() }
 	 
