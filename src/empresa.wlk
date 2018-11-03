@@ -12,7 +12,7 @@ class Empresa {
 		}		
 	}
 	
-	method facturacionEmpresa() = sucursales.sum{ sucursal => sucursal.facturacion() }
+	method facturacion() = sucursales.sum{ sucursal => sucursal.facturacion() }
 	
 	method facturacionSucursal(sucursal) {
 		if (sucursales.contains(sucursal)) {
@@ -25,7 +25,7 @@ class Empresa {
 	method sucursalQueMasFacturo() = sucursales.max{ sucursal => sucursal.facturacion() }
 	
 	method cantidadDePedidosDeColor(color) = sucursales.sum{
-			sucursal => sucursal.pedidos().filter{ pedido => pedido.remera().color() == color }.size()
+			sucursal => sucursal.pedidos().filter{ pedido => pedido.remera().colorBase() == color }.size()
 	}
 	
 	// Obtengo la sucursal que vendio el pedido mas caro y luego lo devuelvo

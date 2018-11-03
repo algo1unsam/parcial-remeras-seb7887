@@ -17,8 +17,18 @@ describe "Empresa" {
 	var pedido5RemerasLisas42
 	var pedido4RemerasFrozen42
 	var pedido4RemerasSinConvenio
+	var empresaFinal
+	var floresFinal
+	var avellanedaFinal
+	var remeraLisaGris42Final
+	var remeraFrozen42Final
+	var remeraSinConvenioFinal
+	var pedido5RemerasLisas42Final
+	var pedido4RemerasFrozen42Final
+	var pedido4RemerasSinConvenioFinal
 	
 	fixture {
+		// Para la parte B
 		flores = new Sucursal(cantidadMinimaParaDescuento = 10)
 		avellaneda = new Sucursal(cantidadMinimaParaDescuento = 3)
 		empresa = new Empresa(sucursales = [flores, avellaneda])
@@ -31,6 +41,22 @@ describe "Empresa" {
 		pedido5RemerasLisas42 = new Pedido(remera = remeraLisaGris42, cantidad = 5)
 		pedido4RemerasFrozen42 = new Pedido(remera = remeraFrozen42, cantidad = 4)
 		pedido4RemerasSinConvenio =  new Pedido(remera = remeraSinConvenio, cantidad = 4)
+		// Para la parte C
+		floresFinal = new Sucursal(cantidadMinimaParaDescuento = 10)
+		avellanedaFinal = new Sucursal(cantidadMinimaParaDescuento = 3)
+		remeraLisaGris42Final = new RemeraLisa(talle = 42, colorBase = colorGris)
+		remeraFrozen42Final = new RemeraSublimada(talle = 42, colorBase = colorGris, alto = 10, ancho = 15, marcaEstampada = disneyConConvenio)
+		remeraSinConvenioFinal = new RemeraSublimada(talle = 42, colorBase = colorGris, alto = 10, ancho = 15, marcaEstampada = disneySinConvenio)
+		pedido5RemerasLisas42Final = new Pedido(remera = remeraLisaGris42Final, cantidad = 5)
+		pedido4RemerasFrozen42Final = new Pedido(remera = remeraFrozen42Final, cantidad = 4)
+		pedido4RemerasSinConvenioFinal =  new Pedido(remera = remeraSinConvenioFinal, cantidad = 4)
+		empresaFinal = new Empresa(sucursales = [floresFinal, avellanedaFinal])
+		empresaFinal.agregarPedido(pedido5RemerasLisas42Final, floresFinal)
+		empresaFinal.agregarPedido(pedido5RemerasLisas42Final, avellanedaFinal)
+		empresaFinal.agregarPedido(pedido4RemerasFrozen42Final, floresFinal)
+		empresaFinal.agregarPedido(pedido4RemerasFrozen42Final, avellanedaFinal)
+		empresaFinal.agregarPedido(pedido4RemerasSinConvenioFinal, avellanedaFinal)
+
 	}
 
 	test "Flores: 5 remeras lisas no se aplica descuento, vale 500" {
@@ -56,6 +82,26 @@ describe "Empresa" {
 	test "Avellaneda: 4 remeras de Frozen, sin convenio con Disney, hay descuento, vale 990" {
 		empresa.agregarPedido(pedido4RemerasSinConvenio, avellaneda)
 		assert.equals(990, pedido4RemerasSinConvenio.valor())
+	}
+	
+	test "Empresa: facturacion total Flores es de 1330" {
+		assert.equals(1330, empresaFinal.facturacionSucursal(floresFinal))
+	}
+	
+	test "Empresa: facturacion total Avellaneda es de 2320" {
+		assert.equals(2320, empresaFinal.facturacionSucursal(avellanedaFinal))
+	}
+	
+	test "Empresa: facturacion final de todos los pedidos da 3650" {
+		assert.equals(3650, empresaFinal.facturacion())
+	}
+	
+	test "Empresa: Avellaneda es la sucursal que mas facturo" {
+		assert.equals(avellanedaFinal, empresaFinal.sucursalQueMasFacturo())
+	}
+	
+	test "Empresa: hay 5 pedidos de color gris" {
+		assert.equals(5, empresaFinal.cantidadDePedidosDeColor(colorGris))
 	}
 	
 }
