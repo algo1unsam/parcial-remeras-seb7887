@@ -73,7 +73,7 @@ class Sucursal {
 	method facturacion() = pedidos.sum{ pedido => pedido.valor() }
 	
 	// 48 - 32 = 16 talles en total
-	method vendioTodosLosTalles() = tallesPedidos.asSet().size() == 16
+	method vendioTodosLosTalles() = tallesPedidos.asSet().size() == (32..42).asList().size()
 	
 	method pedidoMasCaro() = pedidos.max{ pedido => pedido.valor() }
 	 

@@ -104,4 +104,11 @@ describe "Empresa" {
 		assert.equals(5, empresaFinal.cantidadDePedidosDeColor(colorGris))
 	}
 	
+	test "Empresa: el pedido que mas facturo es el de 4 Remeras Frozen sin convenio" {
+		assert.equals(pedido4RemerasSinConvenioFinal, empresaFinal.pedidoMasCaro())
+	}
+	
+	test "Empresa: nadie vendio todos los talles" {
+		assert.equals([], empresaFinal.sucursalesQueVendieronTodosLosTalles())
+	}
 }
